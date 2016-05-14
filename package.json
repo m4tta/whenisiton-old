@@ -1,0 +1,21 @@
+{
+  "name": "whenisiton",
+  "version": "1.0.0",
+  "description": "Lets you know when the next episode is.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Anderson <mattandersonj@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "event-stream": "^3.3.2",
+    "gulp": "^3.9.1",
+    "gulp-inject": "^4.0.0",
+    "main-bower-files": "^2.13.0"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0"
+  }
+}
