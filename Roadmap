@@ -2,7 +2,8 @@ WhenIsItOn?
 
 Baseline goal:
 Simple site with just a clean page with a search box.
-Attempts auto complete as you type showing a small image of the show.
+Attempts auto complete as you type showing a small image of the show. (only do a live search once a second or so...)
+    - have a local db(mongo?) that stores the names of all recent shows. use that for live search
 next page simply shows the next date of the next airing episode if it can.
 
 possible future features:
