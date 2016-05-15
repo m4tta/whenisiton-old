@@ -1,84 +1,105 @@
+var searchField = document.getElementById('searchField');
+var searchResultsList = document.getElementById('searchResultsList');
+var searchResults = document.getElementById('searchResults');
+
+function getJSON(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "json";
+  xhr.onload = function() {
+    var status = xhr.status;
+    if (status == 200) {
+      callback(null, xhr.response);
+    } else {
+      callback(status);
+    }
+  };
+  xhr.send();
+};
+
 function searchSeries(query, callback) {
-    var request = new XMLHttpRequest();
-    request.open('GET', `http://api.tvmaze.com/search/shows?q=${query}`, true);
-
-    request.onload = function () {
-        if (this.status >= 200 && this.status < 400) {
-            // Success!
-            var data = JSON.parse(this.response);
-            callback(data, null);
-        } else {
-            // We reached our target server, but it returned an error
-            callback(null, 'error');
-            request.onerror();
-        }
-    };
-
-    request.onerror = function () {
-        callback(null, 'error');
-        return new Error();
-        // There was a connection error of some sort
-    };
-
-    request.send();
+  getJSON(`http://api.tvmaze.com/search/shows?q=${query}`, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, data);
+    }
+  });
 }
 
 function nextEpisode(showObject, callback) {
-    if (!showObject._links.nextepisode) return new Error("Can't find a next episode.");
+  if (!showObject._links.nextepisode) {
+    callback('error');
+  } else {
     var nextep = showObject._links.nextepisode.href;
-
-    var request = new XMLHttpRequest();
-    request.open('GET', nextep, true);
-
-    request.onload = function () {
-        if (this.status >= 200 && this.status < 400) {
-            // Success!
-            var data = JSON.parse(this.response);
-            callback(data, null);
-        } else {
-            // We reached our target server, but it returned an error
-            callback(null, 'error');
-            request.onerror();
-        }
-    };
-
-    request.onerror = function () {
-        callback(null, 'error');
-        return new Error();
-        // There was a connection error of some sort
-    };
-
-    request.send();
+    getJSON(nextep, function(err, data) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, data);
+      }
+    });
+  }
 }
 
 function listshows(shows) {
-    var ul = document.getElementById('showlist');
-    ul.innerHTML = null;
-    shows.forEach(function (show) {
-        var a = document.createElement('a');
-        a.href = '#';
-        a.onclick = function () {
-            nextEpisode(show.show, function(res, err) {
-                alert(`${show.show.name} airs on ${res.airdate}`);
-            });
+  searchResultsList.innerHTML = null; // clear list between repopulation
+  shows.forEach(function(show) {
+    var li = document.createElement('li'); // create 'li' for each show
+    li.onclick = function() {
+      searchField.value = show.show.name;
+      searchResultsList.classList.add('hidden');
+      nextEpisode(show.show, function(err, res) {
+        searchResults.classList.remove('hidden');
+        if (err) {
+          searchResults.innerHTML = 'No Date';
+        } else {
+          searchResults.innerHTML = (`${show.show.name} airs on ${res.airdate}`);
         }
-        a.appendChild(document.createTextNode(`${show.show.name} (premiered ${show.show.premiered}) [${show.show.status}]`));
-        var li = document.createElement('li');
-        li.appendChild(a);
-        ul.appendChild(li);
-    });
+      });
+    };
+    li.appendChild(document.createTextNode(`${show.show.name} (${(show.show.premiered) ? show.show.premiered.substring(0,4) : '?'})`));
+    searchResultsList.appendChild(li); // append to searchResultsList 'ul'
+  });
 }
 
-var tellmebtn = document.getElementById('tellme');
-tellmebtn.addEventListener('click', function () {
-    var query = document.getElementById('showname').value;
-    
+searchField.addEventListener('keydown', function() {
+  if (event.keyCode == 13) { // Enter
+    var query = searchField.value;
     // if we only get one show back just tell us that one show.
-    
-    searchSeries(query, function(shows, err) {
-        if (!err) {
-            // do stuff with shows
-            listshows(shows);
+    searchSeries(query, function(err, shows) {
+      if (!err) {
+        searchResultsList.classList.remove('hidden');
+        if (shows.length == 1) {
+          searchField.value = shows[0].show.name;
+          nextEpisode(shows[0].show, function(err, res) {
+            searchResultsList.classList.add('hidden');
+            searchResults.classList.remove('hidden');
+            if (err) {
+              searchResults.innerHTML = ('No Date');
+            } else {
+              searchResults.innerHTML = (`${shows[0].show.name} airs on ${res.airdate}`);
+            }
+          });
+        } else {
+          listshows(shows);
         }
+      }
     });
+  }
+});
+
+searchField.addEventListener('input', function() {
+  if (!searchField.value) {
+    searchResultsList.classList.add('hidden');
+  } else {
+    // live search
+    var query = searchField.value;
+    searchSeries(query, function(err, shows) {
+      if (!err && shows.length > 0) {
+        searchResultsList.classList.remove('hidden');
+        listshows(shows);
+      }
+    });
+  }
 });

@@ -1,0 +1,34 @@
+.search-field {
+    display: block;
+    width: 30%;
+    margin: 1em auto 0;
+    padding: .5em 10px;
+    border: 1px solid #333;
+    font-size: 130%;
+    color: #222;
+}
+.search-field:focus {
+    outline: none;
+}
+.search-results {
+    list-style: none;
+    width: 30%;
+    margin: 0 auto;
+    padding: 5px 10px 0;
+    text-align: left;
+    color: #444;
+    background: #fff;
+    border: 1px solid #333;
+    border-top: none;
+    font-size: 130%;
+}
+.search-results li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+.search-results li:hover {
+    background-color: #F2F2F2;
+}
+.hidden {
+    display: none;
+}
