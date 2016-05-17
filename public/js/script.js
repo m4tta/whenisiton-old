@@ -60,10 +60,12 @@
         return;
       };
       resultsElement.innerHTML = null; // clear the 'ul' between repopulation
-      var resultsLimit = (results.totalResults < 6) ? results.totalResults : 6;
+      var filteredShows = results.Search.filter(function (show) {
+        if (show.Year.length == 5) return show;
+      });
+      var resultsLimit = (filteredShows.length < 6) ? filteredShows.length : 6;
       for (var i = 0; i < resultsLimit; i++) {
-        var show = results.Search[i];
-        if (show.Year.length > 5) return; // if year > 5 > '####-####' has ending date. Show ended.
+        let show = filteredShows[i];
         var li = document.createElement('li'); // create 'li' for each show
         li.onclick = function() {
           searchField.value = show.Title;
