@@ -72,18 +72,20 @@
           // start loading animation somewhere
           nextEpisode(show, function (err, res) {
             // stop loading animation
-            var synopsisText = document.getElementById('synopsis-text');
-            var airdate = document.getElementById('airdate');
-            var episodeImage = document.getElementById("episode-image");
-            episodeImage.src = res.image ? res.image.original : episodeImage.src;
-            synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
-            airdate.innerHTML = res.airdate;
+            if (err) {
+
+            } else {
+              var synopsisText = document.getElementById('synopsis-text');
+              var airdate = document.getElementById('airdate');
+              var episodeImage = document.getElementById("episode-image");
+              episodeImage.src = res.image ? res.image.original : episodeImage.src;
+              synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
+              airdate.innerHTML = res.airdate;
+            }
             uiActions.goTop();
           });
         };
         var img = document.createElement('img'); // poster image
-        img.height = 60;
-        img.width = 41;
         if (show.Poster.length > 5) {
           img.src = show.Poster;
         } else {
