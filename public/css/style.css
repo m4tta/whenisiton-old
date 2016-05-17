@@ -172,7 +172,7 @@ body::before {
   visibility: visible;
   top: 140px !important;
 }
-#episode img {
+#episode-image {
   width: 550px;
   height: auto;
 }

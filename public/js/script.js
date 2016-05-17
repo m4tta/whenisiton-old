@@ -74,6 +74,8 @@
             // stop loading animation
             var synopsisText = document.getElementById('synopsis-text');
             var airdate = document.getElementById('airdate');
+            var episodeImage = document.getElementById("episode-image");
+            episodeImage.src = res.image ? res.image.original : episodeImage.src;
             synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
             airdate.innerHTML = res.airdate;
             uiActions.goTop();
