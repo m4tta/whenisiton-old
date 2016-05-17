@@ -1,105 +1,116 @@
-var searchField = document.getElementById('searchField');
-var searchResultsList = document.getElementById('searchResultsList');
-var searchResults = document.getElementById('searchResults');
+(function() {
 
-function getJSON(url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
-  xhr.responseType = "json";
-  xhr.onload = function() {
-    var status = xhr.status;
-    if (status == 200) {
-      callback(null, xhr.response);
-    } else {
-      callback(status);
-    }
+  var searchField = document.getElementById('searchField');
+  var resultsElement = document.getElementById('results');
+
+  function getJSON(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "json";
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status);
+      }
+    };
+    xhr.send();
   };
-  xhr.send();
-};
 
-function searchSeries(query, callback) {
-  getJSON(`http://api.tvmaze.com/search/shows?q=${query}`, function(err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, data);
-    }
-  });
-}
-
-function nextEpisode(showObject, callback) {
-  if (!showObject._links.nextepisode) {
-    callback('error');
-  } else {
-    var nextep = showObject._links.nextepisode.href;
-    getJSON(nextep, function(err, data) {
+  function searchSeries(query, callback) {
+    getJSON(`http://www.omdbapi.com/?s=${query}&type=series`, function(err, data) {
       if (err) {
+        // propagate error all the way down
         callback(err);
       } else {
         callback(null, data);
       }
     });
   }
-}
 
-function listshows(shows) {
-  searchResultsList.innerHTML = null; // clear list between repopulation
-  shows.forEach(function(show) {
-    var li = document.createElement('li'); // create 'li' for each show
-    li.onclick = function() {
-      searchField.value = show.show.name;
-      searchResultsList.classList.add('hidden');
-      nextEpisode(show.show, function(err, res) {
-        searchResults.classList.remove('hidden');
+  function nextEpisode(showObject, callback) {
+    if (showObject.Year.endsWith('–')) {
+      getJSON(`http://api.tvmaze.com/lookup/shows?imdb=${showObject.imdbID}`, function(err, data) {
         if (err) {
-          searchResults.innerHTML = 'No Date';
+          console.log(err);
+          callback(err);
         } else {
-          searchResults.innerHTML = (`${show.show.name} airs on ${res.airdate}`);
+          if (data._links.nextepisode) {
+            getJSON(data._links.nextepisode.href, function(err, data) {
+              callback(null, data);
+            });
+          } else {
+            callback('No date')
+          }
         }
       });
-    };
-    li.appendChild(document.createTextNode(`${show.show.name} (${(show.show.premiered) ? show.show.premiered.substring(0,4) : '?'})`));
-    searchResultsList.appendChild(li); // append to searchResultsList 'ul'
-  });
-}
+    } else {
+      callback('Ended');
+    }
+  }
 
-searchField.addEventListener('keydown', function() {
-  if (event.keyCode == 13) { // Enter
-    var query = searchField.value;
-    // if we only get one show back just tell us that one show.
-    searchSeries(query, function(err, shows) {
-      if (!err) {
-        searchResultsList.classList.remove('hidden');
-        if (shows.length == 1) {
-          searchField.value = shows[0].show.name;
-          nextEpisode(shows[0].show, function(err, res) {
-            searchResultsList.classList.add('hidden');
-            searchResults.classList.remove('hidden');
-            if (err) {
-              searchResults.innerHTML = ('No Date');
-            } else {
-              searchResults.innerHTML = (`${shows[0].show.name} airs on ${res.airdate}`);
-            }
-          });
-        } else {
-          listshows(shows);
+  function autoCompleteResults(query) {
+    searchSeries(query, function(err, results) {
+      // no results
+      if (results.Response == 'False') {
+        if (searchField.value == '') {
+          resultsElement.innerHTML = null;
         }
+        return;
+      };
+      resultsElement.innerHTML = null; // clear the 'ul' between repopulation
+      var resultsLimit = (results.totalResults < 6) ? results.totalResults : 6;
+      for (var i = 0; i < resultsLimit; i++) {
+        var show = results.Search[i];
+        if (show.Year.length > 5) return; // if year > 5 > '####-####' has ending date. Show ended.
+        var li = document.createElement('li'); // create 'li' for each show
+        li.onclick = function() {
+          searchField.value = show.Title;
+        };
+        var img = document.createElement('img'); // poster image
+        img.height = 60;
+        img.width = 41;
+        if (show.Poster.length > 5) {
+          img.src = show.Poster;
+        } else {
+          img.setAttribute('data-src', 'holder.js/41x60?theme=sky&text=X');
+        }
+        li.appendChild(img);
+        var span = document.createElement('span');
+        span.textContent = `${show.Title} (${show.Year})`;
+        li.appendChild(span);
+        resultsElement.appendChild(li); // append to searchResultsList 'ul'
       }
+      // Apply placeholder images for shows that have no poster.
+      Holder.run();
     });
   }
-});
 
-searchField.addEventListener('input', function() {
-  if (!searchField.value) {
-    searchResultsList.classList.add('hidden');
-  } else {
-    // live search
-    var query = searchField.value;
-    searchSeries(query, function(err, shows) {
-      if (!err && shows.length > 0) {
-        searchResultsList.classList.remove('hidden');
-        listshows(shows);
-      }
-    });
-  }
-});
+  searchField.addEventListener('keydown', function() {
+    if (event.keyCode == 13) { // Enter
+    }
+  });
+
+  searchField.addEventListener('input', function() {
+    autoCompleteResults(searchField.value);
+    // var waiting = false; // Prevents calling the api before the last query returned. May change how this is done. If at all.
+    // if (searchField.value.length < 2) {
+    //   //searchResultsList.classList.add('hidden');
+    // } else if (!waiting) {
+    //   waiting = true;
+    //   searchSeries(searchField.value, function(err, shows) {
+    //     console.log(shows);
+    //     waiting = false;
+    //     if (!err && shows.Response == 'True') {
+    //       //searchResultsList.classList.remove('hidden');
+    //       autoCompleteResults(shows);
+    //     }
+    //     if (searchField.value.length < 2) {
+    //       results.innerHTML = '';
+    //     }
+    //   });
+    // }
+  });
+
+})();

@@ -1,6 +1,5 @@
 var express = require('express');
 var handlebars = require('express-handlebars');
-var tvdb = require('./app/services/tvdbAPI')
 var app = express();
 
 app.set('views', 'app/views');

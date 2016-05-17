@@ -16,5 +16,6 @@
     "tests"
   ],
   "dependencies": {
+    "holderjs": "^2.9.3"
   }
 }
