@@ -12,6 +12,8 @@ html, body {
 body {
   background: linear-gradient(to right bottom, #0e2b4d, #512604);
   background-color: #232323;
+  font-family: 'Roboto';
+  color: #FFF;
 }
 
 /* Blurred background image */
@@ -60,7 +62,7 @@ body::before {
 }
 #input-group {
   position: relative;
-  top: calc((800px - 75px) / 2.3);
+  top: calc((800px - 75px) / 2.7);
   overflow: hidden;
   width: 100%;
   height: 75px;
@@ -124,13 +126,18 @@ body::before {
   font-weight: 400;
   position: absolute;
   padding: 0;
-  top: 380px;
+  top: 330px;
   left: 100px;
   width: 400px;
   list-style: none;
   background-color: #6881a7;
   border-radius: 3px;
 }
+
+#results.focus {
+  visibility: hidden;
+}
+
 #results li {
   padding-top: 5px;
   padding-left: 5px;
@@ -142,13 +149,33 @@ body::before {
 #results li:last-child {
   padding-bottom: 5px;
 }
-
 #results li span {
   margin-left: 5px;
 }
-
 #results li:hover {
   color: tomato;
   cursor: pointer;
   background-color: #51678a;
+}
+#results li:active {
+  background-color: #51678a;
+}
+
+#episode {
+  position: absolute;
+  top: 1000px;
+  padding-left: 25px;
+  padding-right: 25px;
+  visibility: hidden;
+  transition: 300ms cubic-bezier(0.01015, 0.995, 0.55015, 0.845);
+}
+
+#episode.focus {
+  visibility: visible;
+  top: 140px;
+}
+
+#episode img {
+  width: 550px;
+  height: auto;
 }

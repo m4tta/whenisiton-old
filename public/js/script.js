@@ -1,6 +1,6 @@
 (function() {
 
-  var searchField = document.getElementById('searchField');
+  var searchfield = document.getElementById('searchfield');
   var resultsElement = document.getElementById('results');
 
   function getJSON(url, callback) {
@@ -54,7 +54,7 @@
     searchSeries(query, function(err, results) {
       // no results
       if (results.Response == 'False') {
-        if (searchField.value == '') {
+        if (searchfield.value == '') {
           resultsElement.innerHTML = null;
         }
         return;
@@ -68,7 +68,9 @@
         let show = filteredShows[i];
         var li = document.createElement('li'); // create 'li' for each show
         li.onclick = function() {
-          searchField.value = show.Title;
+          searchfield.value = show.Title;
+          // start loading animation somewhere
+          uiActions.goTop();
         };
         var img = document.createElement('img'); // poster image
         img.height = 60;
@@ -89,13 +91,14 @@
     });
   }
 
-  searchField.addEventListener('keydown', function() {
+  searchfield.addEventListener('keydown', function() {
     if (event.keyCode == 13) { // Enter
     }
   });
 
-  searchField.addEventListener('input', function() {
-    autoCompleteResults(searchField.value);
+  searchfield.addEventListener('input', function() {
+    uiActions.goMiddle();
+    autoCompleteResults(searchfield.value);
     // var waiting = false; // Prevents calling the api before the last query returned. May change how this is done. If at all.
     // if (searchField.value.length < 2) {
     //   //searchResultsList.classList.add('hidden');
