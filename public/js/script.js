@@ -1,7 +1,6 @@
 (function() {
 
   var searchfield = document.getElementById('searchfield');
-  var resultsElement = document.getElementById('results');
 
   function getJSON(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -51,6 +50,7 @@
   }
 
   function autoCompleteResults(query) {
+    var resultsElement = document.getElementById('results');
     searchSeries(query, function(err, results) {
       // no results
       if (results.Response == 'False') {
@@ -70,7 +70,14 @@
         li.onclick = function() {
           searchfield.value = show.Title;
           // start loading animation somewhere
-          uiActions.goTop();
+          nextEpisode(show, function (err, res) {
+            // stop loading animation
+            var synopsisText = document.getElementById('synopsis-text');
+            var airdate = document.getElementById('airdate');
+            synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
+            airdate.innerHTML = res.airdate;
+            uiActions.goTop();
+          });
         };
         var img = document.createElement('img'); // poster image
         img.height = 60;
