@@ -68,7 +68,7 @@ body::before {
   height: 75px;
   transition: top 350ms ease-in-out;
   border-radius: 3px;
-  background: #6881a7;
+  /*background: #6881a7;*/
 }
 #input-group.focus {
   top: 60px !important;
@@ -86,7 +86,8 @@ body::before {
   color: #fff;
   border: none;
   outline: none;
-  background: #6881a7;
+  /*background: #6881a7;*/
+  background-color: rgb(20, 56, 91);
 }
 .search-field.focus {
   font-size: 26px !important;
@@ -120,43 +121,39 @@ body::before {
   color: tomato;
 }
 #results {
-  font-family: 'Roboto';
-  color: #FFF;
-  font-size: 18px;
-  font-weight: 400;
   position: absolute;
   padding: 0;
   top: 330px;
   left: 100px;
   width: 400px;
   list-style: none;
-  background-color: #6881a7;
+  background-color: rgb(20, 56, 91);
   border-radius: 3px;
 }
 #results.focus {
   visibility: hidden !important;
 }
 #results li {
-  padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
   display: flex;
   align-items: center;
   overflow: hidden;
+  font-family: 'Roboto';
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 300;
 }
-#results li:last-child {
-  padding-bottom: 5px;
-}
+
 #results li span {
   margin-left: 5px;
 }
 #results li:hover {
   color: tomato;
   cursor: pointer;
-  background-color: #51678a;
-}
-#results li:active {
-  background-color: #51678a;
+  background-color: rgb(30, 73, 115);
 }
 #results li img {
   min-width: 41px;

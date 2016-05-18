@@ -25,6 +25,7 @@ var uiActions = (function() {
     elements.forEach(function(element) {
       element.classList.remove('focus');
     })
+    synopsisCover.classList.remove('hidden');
   };
   return functions;
 })();
