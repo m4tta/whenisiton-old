@@ -7,7 +7,7 @@
     "postinstall": "./node_modules/bower/bin/bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Matthew Anderson <mattandersonj@gmail.com>",
+  "author": "m4tta <mattandersonj@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "event-stream": "^3.3.2",

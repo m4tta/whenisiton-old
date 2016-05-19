@@ -62,12 +62,12 @@
       // no results
       if (results.Response == 'False' || err) {
         if (searchfield.value == '') {
-          resultsElement.innerHTML = null;
+          resultsElement.innerHTML = '';
         }
         return;
       };
       uiActions.showSearch();
-      resultsElement.innerHTML = null; // clear the 'ul' between repopulation
+      resultsElement.innerHTML = ''; // clear the 'ul' between repopulation
       var filteredShows = results.Search.filter(function(show) {
         if (show.Year.length == 5) return show;
       });
@@ -127,7 +127,7 @@
     });
   }
 
-  searchfield.addEventListener('keydown', function() {
+  searchfield.addEventListener('keydown', function(event) {
     if (event.keyCode == 13) { // Enter
     }
   });

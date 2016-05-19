@@ -1,7 +1,7 @@
 {
-  "name": "WhenIsItOn",
+  "name": "whenisiton",
   "authors": [
-    "Matthew Anderson <mattandersonj@gmail.com>"
+    "m4tta <mattandersonj@gmail.com>"
   ],
   "description": "Lets you know when the next episode is.",
   "main": "",
