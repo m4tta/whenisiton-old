@@ -60,12 +60,13 @@
     var resultsElement = document.getElementById('results');
     searchSeries(query, function(err, results) {
       // no results
-      if (results.Response == 'False') {
+      if (results.Response == 'False' || err) {
         if (searchfield.value == '') {
           resultsElement.innerHTML = null;
         }
         return;
       };
+      uiActions.showSearch();
       resultsElement.innerHTML = null; // clear the 'ul' between repopulation
       var filteredShows = results.Search.filter(function(show) {
         if (show.Year.length == 5) return show;
@@ -81,6 +82,9 @@
             // stop loading animation
             if (err) {
               // TODO: Handle the error for when there is no episodes at all
+              var errorText = document.getElementById('error-text');
+              errorText.innerHTML = err;
+              uiActions.showError();
             } else {
               var synopsisText = document.getElementById('synopsis-text');
               var airdate = document.getElementById('airdate');
@@ -89,15 +93,21 @@
               var episodeNumber = document.getElementById('episode-number');
               var showPoster = document.getElementById('show-poster');
               showPoster.setAttribute('src', show.Poster);
+              showPoster.setAttribute('data-src', 'holder.js/100x148?bg=333333');
               episodeTitle.innerHTML = res.name;
               var episodeNumberString = `Episode ${res.season}x${pad(res.number, 2)}`;
               episodeNumber.innerHTML = episodeNumberString;
+              var tempDiv = document.createElement('div');
+              tempDiv.innerHTML = res.summary;
+              res.summary = tempDiv.textContent || tempDiv.innerText || "";
               synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
               var date = moment(res.airstamp);
               airdate.innerHTML = `${date.format('dddd, MMMM Do YYYY')}`;
               airdateFromnow.innerHTML = date.isBefore(moment()) ? `Aired ${date.fromNow()}` : `Airing ${date.fromNow()}`;
+              uiActions.showEpisode();
             }
-            uiActions.showEpisode();
+            // Apply placeholder images for shows that have no poster.
+            Holder.run();
           });
         };
         var img = document.createElement('img'); // poster image

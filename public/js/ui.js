@@ -7,9 +7,10 @@ var uiActions = (function() {
   var logoP = document.getElementById('logo-p');
   var results = document.getElementById('results')
   var episode = document.getElementById('episode-details')
+  var error = document.getElementById('error')
   var synopsisCover = document.getElementById('synopsis-cover');
   //var elements = [episode, results, searchfield, inputGroup, container, continput, logo, logoP];
-  var elements = [results, episode];
+  var elements = [results, episode, error];
   var functions = {};
 
   synopsisCover.addEventListener('click', function() {
@@ -18,15 +19,24 @@ var uiActions = (function() {
 
   functions.showEpisode = function() {
     elements.forEach(function(element) {
-      element.classList.add('focus');
-    })
+      element.classList.remove('focus');
+    });
+    episode.classList.add('focus');
+    synopsisCover.classList.remove('hidden'); // replace the synopsisCover
   };
 
   functions.showSearch = function() {
     elements.forEach(function(element) {
       element.classList.remove('focus');
-    })
-    synopsisCover.classList.remove('hidden');
+    });
+    results.classList.add('focus');
+  };
+
+  functions.showError = function() {
+    elements.forEach(function(element) {
+      element.classList.remove('focus');
+    });
+    error.classList.add('focus');
   };
   return functions;
 })();
