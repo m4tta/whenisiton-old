@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "holderjs": "^2.9.3"
+    "holderjs": "^2.9.3",
+    "moment": "momentjs#^2.13.0"
   }
 }

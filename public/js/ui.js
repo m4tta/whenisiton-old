@@ -6,22 +6,23 @@ var uiActions = (function() {
   var logo = document.getElementById('logo');
   var logoP = document.getElementById('logo-p');
   var results = document.getElementById('results')
-  var episode = document.getElementById('episode')
+  var episode = document.getElementById('episode-details')
   var synopsisCover = document.getElementById('synopsis-cover');
-  var elements = [episode, results, searchfield, inputGroup, container, continput, logo, logoP];
+  //var elements = [episode, results, searchfield, inputGroup, container, continput, logo, logoP];
+  var elements = [results, episode];
   var functions = {};
 
   synopsisCover.addEventListener('click', function() {
     synopsisCover.classList.add('hidden');
   });
 
-  functions.goTop = function() {
+  functions.showEpisode = function() {
     elements.forEach(function(element) {
       element.classList.add('focus');
     })
   };
 
-  functions.goMiddle = function() {
+  functions.showSearch = function() {
     elements.forEach(function(element) {
       element.classList.remove('focus');
     })

@@ -1,6 +1,11 @@
 (function() {
-
   var searchfield = document.getElementById('searchfield');
+
+  function pad(num, size) {
+    var s = num + "";
+    while (s.length < size) s = "0" + s;
+    return s;
+  }
 
   function getJSON(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -28,25 +33,27 @@
     });
   }
 
-  function nextEpisode(showObject, callback) {
-    if (showObject.Year.endsWith('–')) {
-      getJSON(`http://api.tvmaze.com/lookup/shows?imdb=${showObject.imdbID}`, function(err, data) {
-        if (err) {
-          console.log(err);
-          callback(err);
-        } else {
-          if (data._links.nextepisode) {
-            getJSON(data._links.nextepisode.href, function(err, data) {
-              callback(null, data);
-            });
-          } else {
-            callback('No date')
-          }
+  // Gets the next episode if it can. Fallbacks to previous episode
+  // can determine if episode is past or future by the airdate property
+  function getEpisode(showObject, callback) {
+    getJSON(`http://api.tvmaze.com/lookup/shows?imdb=${showObject.imdbID}`, function(err, data) {
+      if (err) {
+        callback(err);
+      } else {
+        if (data._links.nextepisode) {
+          getJSON(data._links.nextepisode.href, function(err, data) {
+            callback(null, data);
+          });
+        } else if (data._links.previousepisode){
+          getJSON(data._links.previousepisode.href, function(err, data) {
+            callback(null, data);
+          });
         }
-      });
-    } else {
-      callback('Ended');
-    }
+        else {
+          callback('No episodes');
+        }
+      }
+    });
   }
 
   function autoCompleteResults(query) {
@@ -60,7 +67,7 @@
         return;
       };
       resultsElement.innerHTML = null; // clear the 'ul' between repopulation
-      var filteredShows = results.Search.filter(function (show) {
+      var filteredShows = results.Search.filter(function(show) {
         if (show.Year.length == 5) return show;
       });
       var resultsLimit = (filteredShows.length < 6) ? filteredShows.length : 6;
@@ -70,19 +77,27 @@
         li.onclick = function() {
           searchfield.value = show.Title;
           // start loading animation somewhere
-          nextEpisode(show, function (err, res) {
+          getEpisode(show, function(err, res) {
             // stop loading animation
             if (err) {
-
+              // TODO: Handle the error for when there is no episodes at all
             } else {
               var synopsisText = document.getElementById('synopsis-text');
               var airdate = document.getElementById('airdate');
-              var episodeImage = document.getElementById("episode-image");
-              episodeImage.src = res.image ? res.image.original : episodeImage.src;
+              var airdateFromnow = document.getElementById('airdate-fromnow');
+              var episodeTitle = document.getElementById('episode-title');
+              var episodeNumber = document.getElementById('episode-number');
+              var showPoster = document.getElementById('show-poster');
+              showPoster.setAttribute('src', show.Poster);
+              episodeTitle.innerHTML = res.name;
+              var episodeNumberString = `Episode ${res.season}x${pad(res.number, 2)}`;
+              episodeNumber.innerHTML = episodeNumberString;
               synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
-              airdate.innerHTML = res.airdate;
+              var date = moment(res.airstamp);
+              airdate.innerHTML = `${date.format('dddd, MMMM Do YYYY')}`;
+              airdateFromnow.innerHTML = date.fromNow();
             }
-            uiActions.goTop();
+            uiActions.showEpisode();
           });
         };
         var img = document.createElement('img'); // poster image
@@ -108,25 +123,8 @@
   });
 
   searchfield.addEventListener('input', function() {
-    uiActions.goMiddle();
+    uiActions.showSearch();
     autoCompleteResults(searchfield.value);
-    // var waiting = false; // Prevents calling the api before the last query returned. May change how this is done. If at all.
-    // if (searchField.value.length < 2) {
-    //   //searchResultsList.classList.add('hidden');
-    // } else if (!waiting) {
-    //   waiting = true;
-    //   searchSeries(searchField.value, function(err, shows) {
-    //     console.log(shows);
-    //     waiting = false;
-    //     if (!err && shows.Response == 'True') {
-    //       //searchResultsList.classList.remove('hidden');
-    //       autoCompleteResults(shows);
-    //     }
-    //     if (searchField.value.length < 2) {
-    //       results.innerHTML = '';
-    //     }
-    //   });
-    // }
   });
 
 })();
