@@ -95,7 +95,7 @@
               synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
               var date = moment(res.airstamp);
               airdate.innerHTML = `${date.format('dddd, MMMM Do YYYY')}`;
-              airdateFromnow.innerHTML = date.fromNow();
+              airdateFromnow.innerHTML = date.isBefore(moment()) ? `Aired ${date.fromNow()}` : `Airing ${date.fromNow()}`;
             }
             uiActions.showEpisode();
           });
