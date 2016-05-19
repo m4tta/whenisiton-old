@@ -4,6 +4,7 @@
   "description": "Lets you know when the next episode is.",
   "main": "server.js",
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matthew Anderson <mattandersonj@gmail.com>",
@@ -15,6 +16,7 @@
     "main-bower-files": "^2.13.0"
   },
   "dependencies": {
+    "bower": "^1.7.9",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0"
   }
