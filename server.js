@@ -2,6 +2,8 @@ var express = require('express');
 var handlebars = require('express-handlebars');
 var app = express();
 
+app.set('port', (process.env.PORT || 3000));
+
 app.set('views', 'app/views');
 var hbsConfig = {
     defaultLayout: 'main',
@@ -17,4 +19,6 @@ app.get('/', function (req, res) {
     res.render('index');
 })
 
-app.listen(3000);
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
