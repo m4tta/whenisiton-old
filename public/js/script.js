@@ -23,7 +23,7 @@
   };
 
   function searchSeries(query, callback) {
-    getJSON(`http://www.omdbapi.com/?s=${query}&type=series`, function(err, data) {
+    getJSON(`http://api.tvmaze.com/search/shows?q=${query}`, function(err, data) {
       if (err) {
         // propagate error all the way down
         callback(err);
@@ -36,31 +36,24 @@
   // Gets the next episode if it can. Fallbacks to previous episode
   // can determine if episode is past or future by the airdate property
   function getEpisode(showObject, callback) {
-    getJSON(`http://api.tvmaze.com/lookup/shows?imdb=${showObject.imdbID}`, function(err, data) {
-      if (err) {
-        callback(err);
-      } else {
-        if (data._links.nextepisode) {
-          getJSON(data._links.nextepisode.href, function(err, data) {
-            callback(null, data);
-          });
-        } else if (data._links.previousepisode){
-          getJSON(data._links.previousepisode.href, function(err, data) {
-            callback(null, data);
-          });
-        }
-        else {
-          callback('No episodes');
-        }
-      }
-    });
+    if (showObject._links.nextepisode) {
+      getJSON(showObject._links.nextepisode.href, function(err, data) {
+        callback(null, data);
+      });
+    } else if (showObject._links.previousepisode) {
+      getJSON(showObject._links.previousepisode.href, function(err, data) {
+        callback(null, data);
+      });
+    } else {
+      callback('No episodes');
+    }
   }
 
   function autoCompleteResults(query) {
     var resultsElement = document.getElementById('results');
     searchSeries(query, function(err, results) {
       // no results
-      if (results.Response == 'False' || err) {
+      if (!results || err) {
         if (searchfield.value == '') {
           resultsElement.innerHTML = '';
         }
@@ -68,15 +61,15 @@
       };
       uiActions.showSearch();
       resultsElement.innerHTML = ''; // clear the 'ul' between repopulation
-      var filteredShows = results.Search.filter(function(show) {
-        if (show.Year.length == 5) return show;
+      var filteredShows = results.filter(function(show) {
+        if (show.show.status == 'Running') return show;
       });
       var resultsLimit = (filteredShows.length < 6) ? filteredShows.length : 6;
       for (var i = 0; i < resultsLimit; i++) {
-        let show = filteredShows[i];
+        let show = filteredShows[i].show;
         var li = document.createElement('li'); // create 'li' for each show
         li.onclick = function() {
-          searchfield.value = show.Title;
+          searchfield.value = show.name;
           // start loading animation somewhere
           getEpisode(show, function(err, res) {
             // stop loading animation
@@ -92,7 +85,7 @@
               var episodeTitle = document.getElementById('episode-title');
               var episodeNumber = document.getElementById('episode-number');
               var showPoster = document.getElementById('show-poster');
-              showPoster.setAttribute('src', show.Poster);
+              showPoster.setAttribute('src', show.image.medium);
               showPoster.setAttribute('data-src', 'holder.js/100x148?bg=333333');
               episodeTitle.innerHTML = res.name;
               var episodeNumberString = `Episode ${res.season}x${pad(res.number, 2)}`;
@@ -111,14 +104,14 @@
           });
         };
         var img = document.createElement('img'); // poster image
-        if (show.Poster.length > 5) {
-          img.src = show.Poster;
+        if (show.image && show.image.medium) {
+          img.src = show.image.medium;
         } else {
           img.setAttribute('data-src', 'holder.js/41x60?theme=sky&text=X');
         }
         li.appendChild(img);
         var span = document.createElement('span');
-        span.textContent = `${show.Title} (${show.Year})`;
+        span.textContent = `${show.name} (${moment(show.premiered).year()})`;
         li.appendChild(span);
         resultsElement.appendChild(li); // append to searchResultsList 'ul'
       }
