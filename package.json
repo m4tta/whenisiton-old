@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "express": "^4.13.4",
-    "express-handlebars": "^3.0.0",
+    "express-handlebars": "^3.0.0"
   }
 }
