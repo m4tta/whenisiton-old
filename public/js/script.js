@@ -64,7 +64,7 @@
       var filteredShows = results.filter(function(show) {
         if (show.show.status == 'Running') return show;
       });
-      var resultsLimit = (filteredShows.length < 6) ? filteredShows.length : 6;
+      var resultsLimit = (filteredShows.length < 8) ? filteredShows.length : 8;
       for (var i = 0; i < resultsLimit; i++) {
         let show = filteredShows[i].show;
         var li = document.createElement('li'); // create 'li' for each show
