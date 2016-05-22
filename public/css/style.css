@@ -26,10 +26,10 @@ body::before {
   content: '';
   background-image: url('/public/images/bg.png');
   background-size: cover;
-  -webkit-filter: blur(50px);
+  /*-webkit-filter: blur(50px);
   -moz-filter: blur(50px);
   -o-filter: blur(50px);
-  -ms-filter: blur(50px);
+  -ms-filter: blur(50px);*/
   filter: blur(50px);
 }
 #container {
@@ -136,8 +136,7 @@ body::before {
   visibility: hidden;
 }
 #results.focus {
-  visibility: visible;
-  !important;
+  visibility: visible !important;
 }
 #results li {
   padding-left: 5px;

@@ -17,7 +17,11 @@
   },
   "dependencies": {
     "bower": "^1.7.9",
+    "csswring": "^5.0.0",
     "express": "^4.13.4",
-    "express-handlebars": "^3.0.0"
+    "express-handlebars": "^3.0.0",
+    "postcss": "^5.0.21",
+    "postcss-cssnext": "^2.5.2",
+    "postcss-middleware": "^1.1.1"
   }
 }
