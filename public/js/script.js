@@ -66,7 +66,7 @@
       });
       var resultsLimit = (filteredShows.length < 8) ? filteredShows.length : 8;
       for (var i = 0; i < resultsLimit; i++) {
-        let show = filteredShows[i].show;
+        var show = filteredShows[i].show;
         var li = document.createElement('li'); // create 'li' for each show
         li.onclick = function() {
           searchfield.value = show.name;
