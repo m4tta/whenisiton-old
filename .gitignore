@@ -2,3 +2,7 @@
 bower_components
 node_modules
 vendor
+npm-debug.log*
+*.log
+logs
+.npm
