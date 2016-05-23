@@ -1,9 +1,8 @@
-/*
-Colors:
-Primary: #152239
-Secondary: #6881A7
-*/
+/* Written for usage with postcss and cssnext */
 
+@custom-media --small-screen (width >=320px) and (width < 400px);
+@custom-media --medium-screen (width >=400px) and (width < 768px);
+@custom-media --large-screen (width >=768px);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
 html, body {
   min-height: 100%;
@@ -15,241 +14,204 @@ body {
   font-family: 'Roboto';
   color: #FFF;
 }
-
-/* Blurred background image */
-
-body::before {
-  position: fixed;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  content: '';
-  background-image: url('/public/images/bg.png');
-  background-size: cover;
-  /*-webkit-filter: blur(50px);
-  -moz-filter: blur(50px);
-  -o-filter: blur(50px);
-  -ms-filter: blur(50px);*/
-  filter: blur(50px);
+@media (--large-screen) {
+  /* Blurred background image */
+  body::before {
+    position: fixed;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    content: '';
+    background-image: url('/public/images/bg.png');
+    background-size: cover;
+    filter: blur(50px);
+  }
 }
 #container {
-  /*display: flex;
-  align-items: center;
-  justify-content: center;*/
   position: absolute;
-  width: 600px;
-  height: 800px;
-  top: calc(50% - 800px / 2);
-  left: calc(50% - 600px / 2);
-  margin: auto;
-  padding-bottom: 15px;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 570px;
+  box-sizing: content-box;
   overflow: hidden;
   background: #152239;
   box-shadow: 0 0 75px 25px rgba(0, 0, 0, .65);
-}
-#continput {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  padding-right: 100px;
-  padding-left: 100px;
-  transition: 150ms cubic-bezier(0, 2.15, .97, .36);
-  transition-delay: 500ms;
-  background: transparent;
-}
-#continput.focus {
-  padding-right: 25px !important;
-  padding-left: 25px !important;
-}
-#input-group {
-  position: relative;
-  top: calc((800px - 75px) / 2.7);
-  overflow: hidden;
-  width: 100%;
-  height: 75px;
-  transition: top 350ms ease-in-out;
-  border-radius: 3px;
-}
-#input-group.focus {
-  top: 60px !important;
-  height: 50px !important;
-}
-.search-field {
-  text-align: center;
-  font-family: 'Roboto';
-  font-size: 40px;
-  font-weight: 300;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  color: #fff;
-  border: none;
-  outline: none;
-  background-color: rgb(20, 56, 91);
-}
-.search-field.focus {
-  font-size: 26px !important;
+  @media (--large-screen) {
+    width: 600px;
+    height: 800px;
+    top: calc(50% - 800px / 2);
+    left: calc(50% - 600px / 2);
+  }
 }
 #logo {
-  margin: 0;
+  width: 100%;
   position: absolute;
   text-align: center;
-  top: 130px;
+  background: transparent;
+  top: 5px;
+  @media (--large-screen) {
+    top: 100px;
+  }
+  & a {
+    text-decoration: none;
+    margin: 0;
+    font-family: 'Roboto';
+    font-size: 44px;
+    font-weight: 900;
+    color: #FFF;
+    @media (--medium-screen) {
+      font-size: 55px;
+    }
+    @media (--large-screen) {
+      font-size: 100px;
+    }
+    & span {
+      font-weight: 200;
+      color: tomato;
+    }
+  }
+}
+.input-container {
   width: 100%;
   box-sizing: border-box;
-  background: transparent;
-  transition: top 350ms;
+  position: absolute;
+  top: 65px;
+  padding-left: 20px;
+  padding-right: 20px;
+  @media (--large-screen) {
+    top: 240px;
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+  & .search-field {
+    text-align: center;
+    font-family: 'Roboto';
+    font-size: 40px;
+    font-weight: 300;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background-color: rgb(20, 56, 91);
+    @media (--small-screen) {
+      font-size: 34px;
+    }
+  }
 }
-#logo.focus {
-  top: 0px !important;
-}
-#logo p {
-  margin: 0;
-  font-family: 'Roboto';
-  font-size: 100px;
-  font-weight: 900;
-  color: #FFF;
-}
-#logo p.focus {
-  font-size: 55px;
-}
-#logo a {
-  text-decoration: none;
-}
-#logo p span {
-  font-family: 'Roboto';
-  font-weight: 200;
-  color: tomato;
+.results-container {
+  position: absolute;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+  top: 140px;
+  @media (--small-screen) {
+    top: 135px;
+  }
+  @media (--large-screen) {
+    top: 315px;
+    padding-left: 70px;
+    padding-right: 70px;
+  }
 }
 #results {
-  position: absolute;
   padding: 0;
-  top: 350px;
-  left: 100px;
-  width: 400px;
-  list-style: none;
-  background-color: rgb(20, 56, 91);
-  border-radius: 3px;
   margin: 0;
-  visibility: hidden;
-}
-#results.focus {
-  visibility: visible !important;
-}
-#results li {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 2.5px;
-  padding-bottom: 2.5px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  font-family: 'Roboto';
-  color: #FFF;
-  font-size: 18px;
-  font-weight: 300;
-}
-#results li span {
-  margin-left: 5px;
-}
-#results li:hover {
-  color: tomato;
-  cursor: pointer;
-  background-color: rgb(30, 73, 115);
-}
-#results li img {
-  min-width: 41px;
-  min-height: 60px;
-  width: 41px;
-  height: 60px;
+  border-radius: 3px;
+  background-color: rgb(20, 56, 91);
+  list-style: none;
+  & li {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: #FFF;
+    font-size: 18px;
+    font-weight: 300;
+    &:hover {
+      color: tomato;
+      cursor: pointer;
+      background-color: rgb(30, 73, 115);
+    }
+    & span {
+      margin-left: 5px;
+    }
+    & img {
+      min-width: 41px;
+      min-height: 60px;
+      width: 41px;
+      height: 60px;
+    }
+  }
 }
 #episode-details {
-  position: absolute;
   padding: 5px;
-  top: 350px;
-  left: 100px;
-  width: 400px;
   list-style: none;
   background-color: rgb(20, 56, 91);
   border-radius: 3px;
   box-sizing: border-box;
-  visibility: hidden;
-}
-#episode-details.focus {
-  visibility: visible;
-}
-#episode-header {
-  overflow: auto;
-  background-color: rgb(19, 46, 72);
-  box-sizing: border-box;
-  padding: 5px;
-}
-#airdate-fromnow {
-  margin-top: 20px;
-  font-size: 32px;
-  font-weight: 200;
-}
-#episode-header time {
-  display: block;
-}
-#episode-header h2, h4 {
-  margin: 0;
-}
-#episode-details img {
-  border: 1px solid #FFF;
-  width: 100px;
-  height: 148px;
-  display: block;
-  float: left;
-  margin-right: 10px;
-}
-#episode-details p {
-  margin: 0;
-}
-#synopsis {
-  position: relative;
-  min-height: 80px;
-  height: 100%;
-  background-color: rgb(19, 46, 72);
-  box-sizing: border-box;
-  margin-top: 5px;
-  padding: 5px;
-}
-#synopsis-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(19, 46, 72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: tomato;
-  font-size: 32px;
-  font-weight: 200;
-  cursor: pointer;
-}
-.hidden {
-  display: none !important;
-}
-#error {
-  position: absolute;
-  padding: 5px;
-  top: 350px;
-  left: 100px;
-  width: 400px;
-  height: 250px;
-  list-style: none;
-  background-color: rgb(20, 56, 91);
-  border-radius: 3px;
-  box-sizing: border-box;
-  visibility: hidden;
-}
-#error.focus {
-  visibility: visible;
+  & #episode-header {
+    overflow: auto;
+    background-color: rgb(19, 46, 72);
+    box-sizing: border-box;
+    padding: 5px;
+    & time {
+      display: block;
+    }
+    @nest & h2, h4 {
+      margin: 0;
+    }
+  }
+  & #airdate-fromnow {
+    display: block;
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: 200;
+    @media (--small-screen) {
+      margin: 5px;
+      float: left;
+    }
+  }
+  & img {
+    border: 1px solid #FFF;
+    width: 100px;
+    height: 148px;
+    display: block;
+    float: left;
+    margin-right: 10px;
+  }
+  & p {
+    margin: 0;
+  }
+  & #synopsis {
+    position: relative;
+    min-height: 80px;
+    background-color: rgb(19, 46, 72);
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 5px;
+    & #synopsis-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(19, 46, 72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: tomato;
+      font-size: 32px;
+      font-weight: 200;
+      cursor: pointer;
+    }
+  }
 }
 footer {
   position: absolute;
@@ -257,9 +219,14 @@ footer {
   width: 100%;
   color: #FFF;
   text-align: center;
+  @media (width < 500px) {
+    font-size: 18px;
+  }
+  & a {
+    color: tomato;
+    text-decoration: none;
+  }
 }
-
-footer a {
-  color: tomato;
-  text-decoration: none;
+.hidden {
+  display: none !important;
 }

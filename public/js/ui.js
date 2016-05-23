@@ -1,15 +1,8 @@
 var uiActions = (function() {
-  var searchfield = document.getElementById('searchfield');
-  var inputGroup = document.getElementById('input-group');
-  var container = document.getElementById('container');
-  var continput = document.getElementById('continput');
-  var logo = document.getElementById('logo');
-  var logoP = document.getElementById('logo-p');
   var results = document.getElementById('results')
   var episode = document.getElementById('episode-details')
   var error = document.getElementById('error')
   var synopsisCover = document.getElementById('synopsis-cover');
-  //var elements = [episode, results, searchfield, inputGroup, container, continput, logo, logoP];
   var elements = [results, episode, error];
   var functions = {};
 
@@ -19,24 +12,24 @@ var uiActions = (function() {
 
   functions.showEpisode = function() {
     elements.forEach(function(element) {
-      element.classList.remove('focus');
+      element.classList.add('hidden');
     });
-    episode.classList.add('focus');
+    episode.classList.remove('hidden');
     synopsisCover.classList.remove('hidden'); // replace the synopsisCover
   };
 
   functions.showSearch = function() {
     elements.forEach(function(element) {
-      element.classList.remove('focus');
+      element.classList.add('hidden');
     });
-    results.classList.add('focus');
+    results.classList.remove('hidden');
   };
 
   functions.showError = function() {
     elements.forEach(function(element) {
-      element.classList.remove('focus');
+      element.classList.add('hidden');
     });
-    error.classList.add('focus');
+    error.classList.remove('hidden');
   };
   return functions;
 })();

@@ -65,8 +65,9 @@
         if (show.show.status == 'Running') return show;
       });
       var resultsLimit = (filteredShows.length < 8) ? filteredShows.length : 8;
-      for (var i = 0; i < resultsLimit; i++) {
-        var show = filteredShows[i].show;
+      filteredShows.forEach(function(resultObject, index) {
+        var show = resultObject.show; //
+        if (index > resultsLimit) return;
         var li = document.createElement('li'); // create 'li' for each show
         li.onclick = function() {
           searchfield.value = show.name;
@@ -114,7 +115,7 @@
         span.textContent = `${show.name} (${moment(show.premiered).year()})`;
         li.appendChild(span);
         resultsElement.appendChild(li); // append to searchResultsList 'ul'
-      }
+      });
       // Apply placeholder images for shows that have no poster.
       Holder.run();
     });

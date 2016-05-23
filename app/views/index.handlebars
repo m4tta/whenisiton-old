@@ -1,38 +1,36 @@
 <div id="container" class="container">
     <div id="logo">
-      <a href="/">
-        <p id="logo-p">
+        <a href="/">
           WhenIsIt<span>On</span>
-        </p>
-      </a>
+        </a>
     </div>
-    <div id="continput">
-        <div id="input-group">
-            <input type="text" id="searchfield" class="search-field" placeholder="Enter a show." autofocus>
-        </div>
+    <div class="input-container">
+        <input type="text" id="searchfield" class="search-field" placeholder="Enter a show." autofocus>
     </div>
-    <ul id="results"></ul>
-    <div id="episode-details">
-        <div id="episode-header">
-            <img id="show-poster" />
-            <h2 id="episode-title"></h2>
-            <h4 id="episode-number"></h4>
-            <time id="airdate"></time>
-            <time id="airdate-fromnow"></time>
-        </div>
-        <div id="synopsis">
-            <p id="synopsis-text">
-                No synopsis available for this episode.
-            </p>
-            <div id="synopsis-cover">
-                <span>Show synopsis.</span>
+    <div class="results-container">
+        <ul id="results" class="hidden"></ul>
+        <div id="episode-details" class="hidden">
+            <div id="episode-header">
+                <img id="show-poster" />
+                <h2 id="episode-title"></h2>
+                <h4 id="episode-number"></h4>
+                <time id="airdate"></time>
+                <time id="airdate-fromnow"></time>
+            </div>
+            <div id="synopsis">
+                <p id="synopsis-text">
+                    No synopsis available for this episode.
+                </p>
+                <div id="synopsis-cover">
+                    <span>Show synopsis.</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="error">
-      <span id="error-text"></span>
+        <div id="error" class="hidden">
+            <span id="error-text">Error</span>
+        </div>
     </div>
     <footer>
-      <span><a href="https://github.com/m4tta/whenisiton">GitHub</a> | <a href="https://github.com/m4tta/whenisiton/issues">Issues</a></span>
+        <span><a href="https://github.com/m4tta/whenisiton">GitHub</a> | <a href="https://github.com/m4tta/whenisiton/issues">Issues</a></span>
     </footer>
 </div>
