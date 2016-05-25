@@ -3,8 +3,13 @@ var uiActions = (function() {
   var episode = document.getElementById('episode-details')
   var error = document.getElementById('error')
   var synopsisCover = document.getElementById('synopsis-cover');
+  var searchField = document.getElementById('searchfield');
   var elements = [results, episode, error];
   var functions = {};
+
+  searchfield.addEventListener('focus', function (e) {
+    searchfield.select();
+  })
 
   synopsisCover.addEventListener('click', function() {
     synopsisCover.classList.add('hidden');
