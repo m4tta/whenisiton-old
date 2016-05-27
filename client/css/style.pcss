@@ -1,5 +1,3 @@
-/* Written for usage with postcss and cssnext */
-
 @custom-media --small-screen (width >=320px) and (width < 400px);
 @custom-media --medium-screen (width >=400px) and (width < 768px);
 @custom-media --large-screen (width >=768px);
@@ -15,7 +13,6 @@ body {
   color: #FFF;
 }
 @media (--large-screen) {
-  /* Blurred background image */
   body::before {
     position: fixed;
     z-index: -1;

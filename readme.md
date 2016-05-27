@@ -1,6 +1,6 @@
 # When Is It On?
 
-Allows you to search a TV Show name and find out when the next episode will be. Live @ http://whenisiton.fizzled.me
+Allows you to search a TV Show name and find out when the next episode will be. Live @ http://whenisiton.tv
 
 It started out mostly as an excuse to work on my nonexistent CSS skills.
 

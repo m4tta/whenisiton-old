@@ -1,3 +1,5 @@
+"use strict";
+
 var uiActions = (function() {
   var results = document.getElementById('results')
   var episode = document.getElementById('episode-details')
