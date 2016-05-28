@@ -103,7 +103,8 @@ gulp.task('wiredep', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./client/css/*.pcss'], ['css', 'scripts']);
+  gulp.watch('./client/css/*.pcss', ['css']);
+  gulp.watch('./client/js/*.js', ['scripts']);
 });
 
 gulp.task('watch:styles', function() {
