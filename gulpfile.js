@@ -102,6 +102,14 @@ gulp.task('wiredep', function() {
     .pipe(gulp.dest('./app/views/layouts/'));
 });
 
+gulp.task('watch', function() {
+  gulp.watch(['./client/css/*.pcss'], ['css', 'scripts']);
+});
+
 gulp.task('watch:styles', function() {
   gulp.watch('./client/css/*.pcss', ['css']);
+});
+
+gulp.task('watch:scripts', function() {
+  gulp.watch('./client/js/*.js', ['scripts']);
 });
