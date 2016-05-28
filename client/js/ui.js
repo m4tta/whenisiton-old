@@ -9,6 +9,10 @@ var uiActions = (function() {
   var elements = [results, episode, error];
   var functions = {};
 
+  document.addEventListener('touchstart', function () {
+    // Make things like :hover work on mobile.
+  }, true);
+
   searchfield.addEventListener('focus', function (e) {
     searchfield.select();
   })

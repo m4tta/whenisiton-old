@@ -90,6 +90,7 @@
               var episodeTitle = document.getElementById('episode-title');
               var episodeNumber = document.getElementById('episode-number');
               var showPoster = document.getElementById('show-poster');
+              var helptip = document.getElementById('helptip');
               showPoster.setAttribute('src', show.image.medium);
               showPoster.setAttribute('data-src', 'holder.js/100x148?bg=333333');
               episodeTitle.innerHTML = res.name;
@@ -101,7 +102,13 @@
               synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
               var date = moment(res.airstamp);
               airdate.innerHTML = "" + date.format('dddd, MMMM Do YYYY');
-              airdateFromnow.innerHTML = date.isBefore(moment()) ? "Aired " + date.fromNow() : "Airing " + date.fromNow();
+              var inPast = date.isBefore(moment());
+              if (inPast) {
+                helptip.classList.remove('hidden')
+              } else {
+                helptip.classList.add('hidden')
+              }
+              airdateFromnow.innerHTML = inPast ? "Aired " + date.fromNow() : "Airing " + date.fromNow();
               // google analytics tracking to see what shows people are looking at.
               ga('send', 'event', 'show', show.name);
               uiActions.showEpisode();
