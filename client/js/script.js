@@ -24,7 +24,7 @@
       }
     };
     xhr.send();
-  };
+  }
 
   function searchSeries(query, callback) {
     getJSON("http://api.tvmaze.com/search/shows?q=" + query, function(err, data) {
@@ -58,11 +58,11 @@
     searchSeries(query, function(err, results) {
       // no results
       if (!results || err) {
-        if (searchfield.value == '') {
+        if (searchfield.value === '') {
           resultsElement.innerHTML = '';
         }
         return;
-      };
+      }
       uiActions.showSearch();
       resultsElement.innerHTML = ''; // clear the 'ul' between repopulation
       var filteredShows = results.filter(function(show) {
@@ -99,14 +99,14 @@
               var tempDiv = document.createElement('div');
               tempDiv.innerHTML = res.summary;
               res.summary = tempDiv.textContent || tempDiv.innerText || "";
-              synopsisText.innerHTML = res.summary != '' ? res.summary : 'No summary available';
+              synopsisText.innerHTML = res.summary !== '' ? res.summary : 'No summary available';
               var date = moment(res.airstamp);
               airdate.innerHTML = "" + date.format('dddd, MMMM Do YYYY');
               var inPast = date.isBefore(moment());
               if (inPast) {
-                helptip.classList.remove('hidden')
+                helptip.classList.remove('hidden');
               } else {
-                helptip.classList.add('hidden')
+                helptip.classList.add('hidden');
               }
               airdateFromnow.innerHTML = inPast ? "Aired " + date.fromNow() : "Airing " + date.fromNow();
               // google analytics tracking to see what shows people are looking at.

@@ -1,9 +1,9 @@
 "use strict";
 
 var uiActions = (function() {
-  var results = document.getElementById('results')
-  var episode = document.getElementById('episode-details')
-  var error = document.getElementById('error')
+  var results = document.getElementById('results');
+  var episode = document.getElementById('episode-details');
+  var error = document.getElementById('error');
   var synopsisCover = document.getElementById('synopsis-cover');
   var searchField = document.getElementById('searchfield');
   var elements = [results, episode, error];
@@ -13,9 +13,9 @@ var uiActions = (function() {
     // Make things like :hover work on mobile.
   }, true);
 
-  searchfield.addEventListener('focus', function (e) {
-    searchfield.select();
-  })
+  searchField.addEventListener('focus', function (e) {
+    searchField.select();
+  });
 
   synopsisCover.addEventListener('click', function() {
     synopsisCover.classList.add('hidden');

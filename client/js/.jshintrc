@@ -1,0 +1,10 @@
+{
+  "browser": true,
+  "globalstrict": true,
+  "globals": {
+    "uiActions": true,
+    "moment": true,
+    "ga": true,
+    "Holder": true
+  }
+}
