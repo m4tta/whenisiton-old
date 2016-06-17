@@ -53,6 +53,51 @@
     }
   }
 
+  function showClick(show) {
+    searchfield.value = show.name;
+    // start loading animation somewhere
+    getEpisode(show, function(err, res) {
+      // stop loading animation
+      if (err) {
+        // TODO: Handle the error for when there is no episodes at all
+        var errorText = document.getElementById('error-text');
+        errorText.innerHTML = err;
+        uiActions.showError();
+      } else {
+        var synopsisText = document.getElementById('synopsis-text');
+        var airdate = document.getElementById('airdate');
+        var airdateFromnow = document.getElementById('airdate-fromnow');
+        var episodeTitle = document.getElementById('episode-title');
+        var episodeNumber = document.getElementById('episode-number');
+        var showPoster = document.getElementById('show-poster');
+        var helptip = document.getElementById('helptip');
+        showPoster.setAttribute('src', show.image.medium);
+        showPoster.setAttribute('data-src', 'holder.js/100x148?bg=333333');
+        episodeTitle.innerHTML = res.name;
+        var episodeNumberString = "Episode " + res.season + "x" + pad(res.number, 2);
+        episodeNumber.innerHTML = episodeNumberString;
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = res.summary;
+        res.summary = tempDiv.textContent || tempDiv.innerText || "";
+        synopsisText.innerHTML = res.summary !== '' ? res.summary : 'No summary available';
+        var date = moment(res.airstamp);
+        airdate.innerHTML = "" + date.format('dddd, MMMM Do YYYY');
+        var inPast = date.isBefore(moment());
+        if (inPast) {
+          helptip.classList.remove('hidden');
+        } else {
+          helptip.classList.add('hidden');
+        }
+        airdateFromnow.innerHTML = inPast ? "Aired " + date.fromNow() : "Airing " + date.fromNow();
+        // google analytics tracking to see what shows people are looking at.
+        ga('send', 'event', 'show', show.name);
+        uiActions.showEpisode();
+      }
+      // Apply placeholder images for shows that have no poster.
+      Holder.run();
+    });
+  }
+
   function autoCompleteResults(query) {
     var resultsElement = document.getElementById('results');
     searchSeries(query, function(err, results) {
@@ -73,50 +118,7 @@
         if (index > resultsLimit) return;
         var show = resultObject.show; //
         var li = document.createElement('li'); // create 'li' for each show
-        li.onclick = function() {
-          searchfield.value = show.name;
-          // start loading animation somewhere
-          getEpisode(show, function(err, res) {
-            // stop loading animation
-            if (err) {
-              // TODO: Handle the error for when there is no episodes at all
-              var errorText = document.getElementById('error-text');
-              errorText.innerHTML = err;
-              uiActions.showError();
-            } else {
-              var synopsisText = document.getElementById('synopsis-text');
-              var airdate = document.getElementById('airdate');
-              var airdateFromnow = document.getElementById('airdate-fromnow');
-              var episodeTitle = document.getElementById('episode-title');
-              var episodeNumber = document.getElementById('episode-number');
-              var showPoster = document.getElementById('show-poster');
-              var helptip = document.getElementById('helptip');
-              showPoster.setAttribute('src', show.image.medium);
-              showPoster.setAttribute('data-src', 'holder.js/100x148?bg=333333');
-              episodeTitle.innerHTML = res.name;
-              var episodeNumberString = "Episode " + res.season + "x" + pad(res.number, 2);
-              episodeNumber.innerHTML = episodeNumberString;
-              var tempDiv = document.createElement('div');
-              tempDiv.innerHTML = res.summary;
-              res.summary = tempDiv.textContent || tempDiv.innerText || "";
-              synopsisText.innerHTML = res.summary !== '' ? res.summary : 'No summary available';
-              var date = moment(res.airstamp);
-              airdate.innerHTML = "" + date.format('dddd, MMMM Do YYYY');
-              var inPast = date.isBefore(moment());
-              if (inPast) {
-                helptip.classList.remove('hidden');
-              } else {
-                helptip.classList.add('hidden');
-              }
-              airdateFromnow.innerHTML = inPast ? "Aired " + date.fromNow() : "Airing " + date.fromNow();
-              // google analytics tracking to see what shows people are looking at.
-              ga('send', 'event', 'show', show.name);
-              uiActions.showEpisode();
-            }
-            // Apply placeholder images for shows that have no poster.
-            Holder.run();
-          });
-        };
+        li.onclick = showClick.bind(this, show);
         var img = document.createElement('img'); // poster image
         if (show.image && show.image.medium) {
           img.src = show.image.medium;
