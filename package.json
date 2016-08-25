@@ -9,8 +9,7 @@
   },
   "author": "m4tta <matt@fizzled.me>",
   "license": "MIT",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
@@ -32,5 +31,8 @@
     "postcss-cssnext": "^2.5.2",
     "pump": "^1.0.1",
     "run-sequence": "^1.2.1"
+  },
+  "engines": {
+    "node": "6.4.0"
   }
 }
